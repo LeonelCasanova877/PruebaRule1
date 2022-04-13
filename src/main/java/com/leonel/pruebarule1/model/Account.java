@@ -1,5 +1,7 @@
 package com.leonel.pruebarule1.model;
 
+import com.sun.istack.NotNull;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -13,13 +15,16 @@ public class Account {
     private String name;
     private String password;
     private String description;
+    private Long pricePerHour;
 
     @Column(unique=true)
     private String email;
-    private AccountState accountState;
 
-    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
-    private List<AccountType> accountTypes;
+    private AccountState accountState = AccountState.AVAILABLE;
+
+    @ManyToOne
+    @JoinColumn(name = "accountTypeId")
+    private AccountType accountType;
 
     @OneToOne
     @JoinColumn(name = "rental_id")
@@ -65,14 +70,6 @@ public class Account {
         this.email = email;
     }
 
-    public List<AccountType> getAccountTypes() {
-        return accountTypes;
-    }
-
-    public void setAccountTypes(List<AccountType> accountTypes) {
-        this.accountTypes = accountTypes;
-    }
-
     public Rental getRental() {
         return rental;
     }
@@ -87,5 +84,21 @@ public class Account {
 
     public void setAccountState(AccountState accountState) {
         this.accountState = accountState;
+    }
+
+    public AccountType getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(AccountType accountType) {
+        this.accountType = accountType;
+    }
+
+    public Long getPricePerHour() {
+        return pricePerHour;
+    }
+
+    public void setPricePerHour(Long pricePerHour) {
+        this.pricePerHour = pricePerHour;
     }
 }
