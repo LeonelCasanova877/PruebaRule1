@@ -1,6 +1,9 @@
 package com.leonel.pruebarule1.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "accountType")
@@ -8,19 +11,20 @@ public class AccountType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
+    private Long id;
+
+    @Column(unique=true)
     private String name;
-    private Long price;
 
-    @ManyToOne
-    @JoinColumn(name = "accountId")
-    private Account account;
+    @OneToMany(mappedBy = "accountType", fetch = FetchType.LAZY)
+    @JsonBackReference
+    private List<Account> accounts;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -32,19 +36,13 @@ public class AccountType {
         this.name = name;
     }
 
-    public Long getPrice() {
-        return price;
+    public List<Account> getAccounts() {
+        return accounts;
     }
 
-    public void setPrice(Long price) {
-        this.price = price;
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
     }
 
-    public Account getAccount() {
-        return account;
-    }
 
-    public void setAccount(Account account) {
-        this.account = account;
-    }
 }
