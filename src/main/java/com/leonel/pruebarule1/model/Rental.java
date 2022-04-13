@@ -13,6 +13,7 @@ public class Rental {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private String userEmail;
+    private Long price;
 
     @OneToOne
     @JoinColumn(name = "account_id")
@@ -56,5 +57,13 @@ public class Rental {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
     }
 }
