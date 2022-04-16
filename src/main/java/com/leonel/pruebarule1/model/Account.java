@@ -1,8 +1,9 @@
 package com.leonel.pruebarule1.model;
 
-import com.sun.istack.NotNull;
-
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -12,23 +13,34 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String name;
-    private String password;
-    private String description;
-    private Long pricePerHour;
 
-    @Column(unique=true)
+    @Column(nullable = false)
+    @NotBlank(message = "name cannot be blank or null")
+    private String name;
+
+    @Column(nullable = false)
+    @NotBlank(message = "password cannot be blank or null")
+    private String password;
+
+    @Column(nullable = false)
+    @NotNull(message = "description cannot be null")
+    private String description;
+
+    @NotNull(message = "Email cannot be null")
+    @Email(regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$", message = "Email format is not valid")
+    @Column(unique=true,nullable = false)
     private String email;
 
+    @Column(nullable = false)
     private AccountState accountState = AccountState.AVAILABLE;
 
     @ManyToOne
     @JoinColumn(name = "accountTypeId")
+    @NotNull(message = "Account must have an associated type")
     private AccountType accountType;
 
-    @OneToOne
-    @JoinColumn(name = "rental_id")
-    private Rental rental;
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    private List<Rental> rentals;
 
     public Long getId() {
         return id;
@@ -70,12 +82,12 @@ public class Account {
         this.email = email;
     }
 
-    public Rental getRental() {
-        return rental;
+    public List<Rental> getRentals() {
+        return rentals;
     }
 
-    public void setRental(Rental rental) {
-        this.rental = rental;
+    public void setRentals(List<Rental> rentals) {
+        this.rentals = rentals;
     }
 
     public AccountState getAccountState() {
@@ -92,13 +104,5 @@ public class Account {
 
     public void setAccountType(AccountType accountType) {
         this.accountType = accountType;
-    }
-
-    public Long getPricePerHour() {
-        return pricePerHour;
-    }
-
-    public void setPricePerHour(Long pricePerHour) {
-        this.pricePerHour = pricePerHour;
     }
 }
