@@ -1,6 +1,11 @@
 package com.leonel.pruebarule1.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -10,13 +15,28 @@ public class Rental {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @Column(nullable = false)
     private LocalDateTime startDate;
+
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @Column(nullable = false)
     private LocalDateTime endDate;
+
+    @Column(nullable = false)
+    @Email(regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$", message = "Email format is not valid")
     private String userEmail;
+
+    @Column(nullable = false)
     private Long price;
 
-    @OneToOne
-    @JoinColumn(name = "account_id")
+    @ManyToOne
+    @JsonBackReference
+    @JoinColumn(name = "accountId")
+    @NotNull(message = "Rental must have an associated account")
     private Account account;
 
     public Long getId() {
