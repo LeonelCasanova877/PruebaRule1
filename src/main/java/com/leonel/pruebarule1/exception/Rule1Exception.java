@@ -1,16 +1,21 @@
 package com.leonel.pruebarule1.exception;
 
+import com.leonel.pruebarule1.dto.ErrorDTO;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 public class Rule1Exception extends RuntimeException{
 
+    private ErrorDTO errorDTO;
     private HttpStatus httpStatus;
 
-    public Rule1Exception(String message, HttpStatus httpStatus){
-        super(message);
+    public Rule1Exception(ErrorDTO errorDTO, HttpStatus httpStatus){
+        this.errorDTO= errorDTO;
         this.httpStatus= httpStatus;
+    }
+
+    public ErrorDTO getErrorDTO() {
+        return errorDTO;
     }
 
     public HttpStatus getHttpStatus() {
