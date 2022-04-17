@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
@@ -27,6 +28,7 @@ public class Rental {
     private LocalDateTime endDate;
 
     @Column(nullable = false)
+    @NotBlank(message = "Email cannot be blank or be null")
     @Email(regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$", message = "Email format is not valid")
     private String userEmail;
 
