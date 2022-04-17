@@ -36,4 +36,47 @@ public class AccountTypeServiceImplementation implements AccountTypeService {
 
         return accountTypeRepository.findAll();
     }
+
+    @Override
+    public Long editAccountType(AccountType accountTypeFromRequest, Long id) {
+
+        AccountType accountTypeFromDB = accountTypeRepository.findById(id).orElseThrow(()->{
+            ErrorDTO error = new ErrorDTO(LocalDateTime.now(),
+                    HttpStatus.NOT_FOUND.value(),
+                    "Account type not found"
+            );
+            throw new Rule1Exception(error, HttpStatus.NOT_FOUND);
+        });
+
+        if(!accountTypeFromDB.getName().equalsIgnoreCase(accountTypeFromRequest.getName())){
+            if(accountTypeRepository.findByNameIgnoreCase(accountTypeFromRequest.getName()).isPresent()){
+                ErrorDTO error = new ErrorDTO(
+                        LocalDateTime.now(),
+                        HttpStatus.BAD_REQUEST.value(),
+                        "Account type already exist"
+                );
+                throw new Rule1Exception(error, HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        accountTypeFromDB.setName(accountTypeFromRequest.getName());
+        accountTypeFromDB.setPricePerHour(accountTypeFromRequest.getPricePerHour());
+
+        return accountTypeRepository.save(accountTypeFromDB).getId();
+    }
+
+    @Override
+    public Long deleteAccountType(Long id) {
+
+        if(accountTypeRepository.findById(id).isEmpty()){
+            ErrorDTO error = new ErrorDTO(LocalDateTime.now(),
+                    HttpStatus.NOT_FOUND.value(),
+                    "Account type with id "+id+" not found"
+            );
+            throw  new Rule1Exception(error, HttpStatus.NOT_FOUND);
+        }
+
+        accountTypeRepository.deleteById(id);
+        return id;
+    }
 }

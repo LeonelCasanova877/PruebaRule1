@@ -30,4 +30,16 @@ public class AccountTypeController {
 
         return new ResponseEntity<>(accountTypeService.findAllAccountTypes(), HttpStatus.OK);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateAccountType(@RequestBody @Valid AccountType accountType, @PathVariable Long id) {
+
+        return new ResponseEntity<>("Account type with id "+accountTypeService.editAccountType(accountType, id)+ " updated", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteAccountType(@PathVariable Long id){
+
+        return new ResponseEntity<>("AccountType with the id "+accountTypeService.deleteAccountType(id)+" deleted", HttpStatus.OK);
+    }
 }
