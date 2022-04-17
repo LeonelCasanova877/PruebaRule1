@@ -44,7 +44,7 @@ public class Rule1ExceptionHandler{
     @ResponseBody
     protected ResponseEntity<ErrorDTO> handleFormatExceptions(InvalidFormatException ex) {
 
-        ErrorDTO errorDTO = new ErrorDTO(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), "Format of "+ ex.getValue().toString()+" is not valid, the format is yyyy-MM-dd HH:mm:ss");
+        ErrorDTO errorDTO = new ErrorDTO(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), "Format of "+ ex.getValue().toString()+" is not valid");
         return new ResponseEntity(errorDTO, HttpStatus.BAD_REQUEST);
     }
 
