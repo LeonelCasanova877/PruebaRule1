@@ -70,18 +70,16 @@ public class RentalServiceImplementation implements RentalService {
     @Override
     public Long deleteRental(Long id) {
 
-        Rental rental =rentalRepository.findById(id)
-                .orElseThrow(()-> {
-                    ErrorDTO error = new ErrorDTO(LocalDateTime.now(),
-                            HttpStatus.NOT_FOUND.value(),
-                            "Rental with id "+id+" not found"
-                    );
-                    return new Rule1Exception(error, HttpStatus.NOT_FOUND);
-                });
+        if(rentalRepository.findById(id).isEmpty()){
+            ErrorDTO error = new ErrorDTO(LocalDateTime.now(),
+                    HttpStatus.NOT_FOUND.value(),
+                    "Rental with id "+id+" not found"
+            );
+            throw  new Rule1Exception(error, HttpStatus.NOT_FOUND);
+        }
 
-        rentalRepository.delete(rental);
-
-        return rental.getId();
+        rentalRepository.deleteById(id);
+        return id;
     }
 
     private List<RentalDTO> getRentalDTOS(List<Rental> rentals) {
