@@ -12,13 +12,6 @@ public class RentalDTO implements Serializable {
     private String userEmail;
     private Long hours;
 
-    public RentalDTO(Long price, LocalDateTime startDate, LocalDateTime endDate, String userEmail, Long hours, String accountType, String account) {
-        this.price = price;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.userEmail = userEmail;
-        this.hours = hours;
-    }
 
     public RentalDTO(Long price, LocalDateTime startDate, LocalDateTime endDate, String userEmail, Long hours) {
         this.price = price;
