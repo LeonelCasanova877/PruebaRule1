@@ -30,6 +30,14 @@ public class RentalServiceImplementation implements RentalService {
     @Override
     public Long createRental(Rental rental) {
 
+        if (rental.getAccount().getId() == null) {
+            ErrorDTO error = new ErrorDTO(LocalDateTime.now(),
+                    HttpStatus.BAD_REQUEST.value(),
+                    "Account id cannot be null"
+            );
+            throw new Rule1Exception(error, HttpStatus.BAD_REQUEST);
+        }
+
         Duration duration= Duration.between(rental.getStartDate(), rental.getEndDate());
         if(duration.isNegative() || duration.isZero()){
             ErrorDTO error = new ErrorDTO(LocalDateTime.now(),
@@ -93,9 +101,7 @@ public class RentalServiceImplementation implements RentalService {
                     rental.getStartDate(),
                     rental.getEndDate(),
                     rental.getUserEmail(),
-                    hours,
-                    rental.getAccount().getAccountType().getName(),
-                    rental.getAccount().getName()
+                    hours
                     )
             );
         });
