@@ -13,4 +13,6 @@ public interface RentalService {
 
     List<RentalDTO> getAllRentals();
 
+    Long deleteRental(Long id);
+
 }

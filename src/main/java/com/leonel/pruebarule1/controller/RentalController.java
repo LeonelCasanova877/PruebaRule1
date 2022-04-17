@@ -37,4 +37,10 @@ public class RentalController {
         return new ResponseEntity<>(rentalService.getAllRentals(), HttpStatus.OK);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteRental(@PathVariable Long id){
+
+        return new ResponseEntity<>("Rental with the id: "+rentalService.deleteRental(id)+" deleted", HttpStatus.OK);
+    }
+
 }
