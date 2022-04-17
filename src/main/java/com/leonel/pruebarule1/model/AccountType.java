@@ -25,7 +25,7 @@ public class AccountType {
     @NotNull(message = "Price per hour must not be null")
     private Long pricePerHour;
 
-    @OneToMany(mappedBy = "accountType", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "accountType", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private List<Account> accounts;
 

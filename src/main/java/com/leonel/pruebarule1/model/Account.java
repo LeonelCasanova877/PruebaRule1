@@ -26,7 +26,7 @@ public class Account {
     @NotNull(message = "description cannot be null")
     private String description;
 
-    @NotNull(message = "Email cannot be null")
+    @NotBlank(message = "Email cannot be blank or be null")
     @Email(regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$", message = "Email format is not valid")
     @Column(unique=true,nullable = false)
     private String email;
@@ -39,7 +39,7 @@ public class Account {
     @NotNull(message = "Account must have an associated type")
     private AccountType accountType;
 
-    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rental> rentals;
 
     public Long getId() {
