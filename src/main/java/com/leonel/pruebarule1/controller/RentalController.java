@@ -30,4 +30,11 @@ public class RentalController {
 
         return new ResponseEntity<>(rentalService.getAllRentalsByAccountId(id), HttpStatus.OK);
     }
+
+    @GetMapping
+    public ResponseEntity<List<RentalDTO>> getAllRentals(){
+
+        return new ResponseEntity<>(rentalService.getAllRentals(), HttpStatus.OK);
+    }
+
 }

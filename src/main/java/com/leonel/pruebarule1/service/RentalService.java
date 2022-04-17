@@ -11,4 +11,6 @@ public interface RentalService {
 
     List<RentalDTO> getAllRentalsByAccountId(Long id);
 
+    List<RentalDTO> getAllRentals();
+
 }

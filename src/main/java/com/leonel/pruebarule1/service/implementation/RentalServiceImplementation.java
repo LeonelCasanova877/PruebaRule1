@@ -57,17 +57,33 @@ public class RentalServiceImplementation implements RentalService {
     public List<RentalDTO> getAllRentalsByAccountId(Long id) {
 
        List<Rental> rentals = rentalRepository.findAllByAccount_Id(id);
-       List<RentalDTO> rentalDTOS = new ArrayList<>();
-       rentals.forEach(rental -> {
-           Duration duration = Duration.between(rental.getStartDate(), rental.getEndDate());
-           Long hours = duration.toHours();
-           rentalDTOS.add(new RentalDTO(rental.getPrice(),
-                   rental.getStartDate(),
-                   rental.getEndDate(),
-                   rental.getUserEmail(),
-                   hours)
-           );
-       });
-       return rentalDTOS;
+        return getRentalDTOS(rentals);
+    }
+
+    @Override
+    public List<RentalDTO> getAllRentals() {
+
+        List<Rental> rentals = rentalRepository.findAll();
+        return getRentalDTOS(rentals);
+    }
+
+    private List<RentalDTO> getRentalDTOS(List<Rental> rentals) {
+
+        List<RentalDTO> rentalDTOS = new ArrayList<>();
+        rentals.forEach(rental -> {
+            Duration duration = Duration.between(rental.getStartDate(), rental.getEndDate());
+            Long hours = duration.toHours();
+            rentalDTOS.add(new RentalDTO(
+                    rental.getPrice(),
+                    rental.getStartDate(),
+                    rental.getEndDate(),
+                    rental.getUserEmail(),
+                    hours,
+                    rental.getAccount().getAccountType().getName(),
+                    rental.getAccount().getName()
+                    )
+            );
+        });
+        return rentalDTOS;
     }
 }
