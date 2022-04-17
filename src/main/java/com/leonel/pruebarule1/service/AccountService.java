@@ -2,6 +2,7 @@ package com.leonel.pruebarule1.service;
 
 import com.leonel.pruebarule1.exception.Rule1Exception;
 import com.leonel.pruebarule1.model.Account;
+import com.leonel.pruebarule1.model.AccountType;
 
 import java.util.List;
 
@@ -16,5 +17,9 @@ public interface AccountService {
     Long updateAccountState(String accountStateName, Long id);
 
     List<Account> findAllAccounts();
+
+    Long editAccount(Account account, Long id);
+
+    Long deleteAccount(Long id);
 
 }

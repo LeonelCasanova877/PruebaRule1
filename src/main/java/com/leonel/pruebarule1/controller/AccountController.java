@@ -1,6 +1,7 @@
 package com.leonel.pruebarule1.controller;
 
 import com.leonel.pruebarule1.model.Account;
+import com.leonel.pruebarule1.model.AccountType;
 import com.leonel.pruebarule1.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,10 +42,22 @@ public class AccountController {
         return new ResponseEntity<>(accountService.findAllAccounts(), HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/state/{id}")
     public ResponseEntity<String> updateAccountState(@RequestParam("accountState") String accountStateName, @PathVariable Long id){
 
         return new ResponseEntity<>("Account "+ accountService.updateAccountState(accountStateName, id)+" state updated ", HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateAccount(@RequestBody @Valid Account Account, @PathVariable Long id) {
+
+        return new ResponseEntity<>("Account with id "+accountService.editAccount(Account, id)+ " updated", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteAccount(@PathVariable Long id){
+
+        return new ResponseEntity<>("Account with the id "+accountService.deleteAccount(id)+" deleted", HttpStatus.OK);
     }
 
 }

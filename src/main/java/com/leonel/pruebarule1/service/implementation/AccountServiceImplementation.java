@@ -44,12 +44,29 @@ public class AccountServiceImplementation implements AccountService {
     public Long createAccount(Account account) {
 
         account.setEmail(account.getEmail().toLowerCase());
+
+        if (account.getAccountType().getId() == null) {
+            ErrorDTO error = new ErrorDTO(LocalDateTime.now(),
+                    HttpStatus.BAD_REQUEST.value(),
+                    "Account type id cannot be null"
+            );
+            throw new Rule1Exception(error, HttpStatus.BAD_REQUEST);
+        }
+
         if(accountRepository.findByEmail(account.getEmail()).isPresent()){
             ErrorDTO error = new ErrorDTO(LocalDateTime.now(),
                     HttpStatus.BAD_REQUEST.value(),
                     "There is already an account associated with this email"
             );
             throw new Rule1Exception(error, HttpStatus.BAD_REQUEST);
+        }
+
+        if(accountTypeRepository.findById(account.getAccountType().getId()).isEmpty()){
+            ErrorDTO error = new ErrorDTO(LocalDateTime.now(),
+                    HttpStatus.NOT_FOUND.value(),
+                    "Account type with id "+account.getAccountType().getId()+" not found"
+            );
+            throw  new Rule1Exception(error, HttpStatus.NOT_FOUND);
         }
         return accountRepository.save(account).getId();
     }
@@ -90,5 +107,59 @@ public class AccountServiceImplementation implements AccountService {
     public List<Account> findAllAccounts() {
 
         return accountRepository.findAll();
+    }
+
+    @Override
+    public Long editAccount(Account accountFromRequest, Long id) {
+
+        accountFromRequest.setEmail(accountFromRequest.getEmail().toLowerCase());
+        Account accountFromDB = findById(id);
+
+        if (accountFromRequest.getAccountType().getId() == null) {
+            ErrorDTO error = new ErrorDTO(LocalDateTime.now(),
+                    HttpStatus.BAD_REQUEST.value(),
+                    "Account type id cannot be null"
+            );
+            throw new Rule1Exception(error, HttpStatus.BAD_REQUEST);
+        }
+
+        if(!accountFromDB.getEmail().equals(accountFromRequest.getEmail())){
+            if(accountRepository.findByEmail(accountFromRequest.getEmail()).isPresent()){
+                ErrorDTO error = new ErrorDTO(LocalDateTime.now(),
+                        HttpStatus.BAD_REQUEST.value(),
+                        "There is already an account associated with this email"
+                );
+                throw new Rule1Exception(error, HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        accountFromDB.setAccountType(accountFromRequest.getAccountType());
+        accountFromDB.setEmail(accountFromRequest.getEmail());
+        accountFromDB.setDescription(accountFromRequest.getDescription());
+        accountFromDB.setName(accountFromRequest.getName());
+        accountFromDB.setPassword(accountFromRequest.getPassword());
+
+        if(accountTypeRepository.findById(accountFromDB.getAccountType().getId()).isEmpty()){
+            ErrorDTO error = new ErrorDTO(LocalDateTime.now(),
+                    HttpStatus.NOT_FOUND.value(),
+                    "Account type with id "+accountFromDB.getAccountType().getId()+" not found"
+            );
+            throw  new Rule1Exception(error, HttpStatus.NOT_FOUND);
+        }
+        return accountRepository.save(accountFromDB).getId();
+    }
+
+    @Override
+    public Long deleteAccount(Long id) {
+        if(accountRepository.findById(id).isEmpty()){
+            ErrorDTO error = new ErrorDTO(LocalDateTime.now(),
+                    HttpStatus.NOT_FOUND.value(),
+                    "Account type with id "+id+" not found"
+            );
+            throw  new Rule1Exception(error, HttpStatus.NOT_FOUND);
+        }
+
+        accountRepository.deleteById(id);
+        return id;
     }
 }
