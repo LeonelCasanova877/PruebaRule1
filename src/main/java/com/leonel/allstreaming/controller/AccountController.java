@@ -43,7 +43,7 @@ public class AccountController {
         return new ResponseEntity<>(accountService.findAllAccounts(), HttpStatus.OK);
     }
 
-    @PutMapping("/state/{id}")
+    @PutMapping("/status/{id}")
     public ResponseEntity<String> updateAccountState(@RequestParam("accountState") String accountStateName, @PathVariable Long id){
 
         return new ResponseEntity<>("Account "+ accountService.updateAccountState(accountStateName, id)+" state updated ", HttpStatus.OK);
