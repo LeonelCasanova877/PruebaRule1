@@ -5,6 +5,7 @@ import com.leonel.allstreaming.model.AccountType;
 import com.leonel.allstreaming.service.AccountTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,13 +13,13 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "accounts/types", consumes={"application/json"})
+@RequestMapping(value = "accounts/types")
 public class AccountTypeController {
 
     @Autowired
     private AccountTypeService accountTypeService;
 
-    @PostMapping
+    @PostMapping(consumes={MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> createAccountType(@RequestBody @Valid AccountType accountType){
 
         return new ResponseEntity<>("Account type " + accountTypeService
@@ -31,7 +32,7 @@ public class AccountTypeController {
         return new ResponseEntity<>(accountTypeService.findAllAccountTypes(), HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(name="/{id}", consumes={MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> updateAccountType(@RequestBody @Valid AccountType accountType, @PathVariable Long id) {
 
         return new ResponseEntity<>("Account type with id "+accountTypeService.editAccountType(accountType, id)+ " updated", HttpStatus.OK);

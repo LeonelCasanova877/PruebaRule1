@@ -1,9 +1,11 @@
 package com.leonel.allstreaming.controller;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.leonel.allstreaming.model.Account;
 import com.leonel.allstreaming.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +13,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "accounts",consumes={"application/json"})
+@RequestMapping(value = "accounts")
 public class AccountController {
 
     @Autowired
@@ -23,7 +25,7 @@ public class AccountController {
         return new ResponseEntity<>(accountService.findById(id), HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping(consumes={MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> createAccount(@RequestBody @Valid Account account){
 
         return new ResponseEntity<>("Account "+ accountService.createAccount(account)+" created", HttpStatus.CREATED);
@@ -47,7 +49,7 @@ public class AccountController {
         return new ResponseEntity<>("Account "+ accountService.updateAccountState(accountStateName, id)+" state updated ", HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(name= "/{id}",consumes={MediaType.APPLICATION_JSON_VALUE} )
     public ResponseEntity<String> updateAccount(@RequestBody @Valid Account Account, @PathVariable Long id) {
 
         return new ResponseEntity<>("Account with id "+accountService.editAccount(Account, id)+ " updated", HttpStatus.OK);

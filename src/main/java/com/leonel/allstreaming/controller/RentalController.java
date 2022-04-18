@@ -6,6 +6,7 @@ import com.leonel.allstreaming.model.Rental;
 import com.leonel.allstreaming.service.RentalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,13 +14,13 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "rentals", consumes={"application/json"})
+@RequestMapping(value = "rentals")
 public class RentalController {
 
     @Autowired
     private RentalService rentalService;
 
-    @PostMapping
+    @PostMapping(consumes={MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> createRental(@RequestBody @Valid Rental rental){
 
         return new ResponseEntity<>("Rental " + rentalService.createRental(rental), HttpStatus.CREATED);
