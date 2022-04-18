@@ -39,7 +39,7 @@ public class Account {
     @NotNull(message = "Account must have an associated type")
     private AccountType accountType;
 
-    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rental> rentals;
 
     public Long getId() {
